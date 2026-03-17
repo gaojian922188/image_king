@@ -16,6 +16,7 @@ class ImageListBloc extends Bloc<ImageListEvent, ImageListState> {
     on<ImageToggleSelected>(_onImageToggleSelected);
     on<ImagesSelectAll>(_onImagesSelectAll);
     on<ImagesDeselectAll>(_onImagesDeselectAll);
+    on<ImagesSorted>(_onImagesSorted);
   }
 
   Future<void> _onImagesAdded(
@@ -83,5 +84,34 @@ class ImageListBloc extends Bloc<ImageListEvent, ImageListState> {
     final images =
         state.images.map((i) => i.copyWith(isSelected: false)).toList();
     emit(state.copyWith(images: images));
+  }
+
+  void _onImagesSorted(ImagesSorted event, Emitter<ImageListState> emit) {
+    // Toggle direction if same field, otherwise default ascending
+    final ascending = state.sortField == event.field
+        ? !state.sortAscending
+        : true;
+
+    final images = List.of(state.images);
+    switch (event.field) {
+      case SortField.size:
+        images.sort((a, b) => ascending
+            ? a.fileSize.compareTo(b.fileSize)
+            : b.fileSize.compareTo(a.fileSize));
+      case SortField.dimension:
+        images.sort((a, b) {
+          final aPixels = a.width * a.height;
+          final bPixels = b.width * b.height;
+          return ascending
+              ? aPixels.compareTo(bPixels)
+              : bPixels.compareTo(aPixels);
+        });
+    }
+
+    emit(state.copyWith(
+      images: images,
+      sortField: event.field,
+      sortAscending: ascending,
+    ));
   }
 }

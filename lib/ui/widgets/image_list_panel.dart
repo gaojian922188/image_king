@@ -57,6 +57,26 @@ class ImageListPanel extends StatelessWidget {
                     ),
                     child: const Text('清空'),
                   ),
+                  const Spacer(),
+                  if (state.images.length > 1) ...[
+                    _SortButton(
+                      label: '大小',
+                      active: state.sortField == SortField.size,
+                      ascending: state.sortAscending,
+                      onPressed: () => context
+                          .read<ImageListBloc>()
+                          .add(const ImagesSorted(SortField.size)),
+                    ),
+                    const SizedBox(width: 4),
+                    _SortButton(
+                      label: '尺寸',
+                      active: state.sortField == SortField.dimension,
+                      ascending: state.sortAscending,
+                      onPressed: () => context
+                          .read<ImageListBloc>()
+                          .add(const ImagesSorted(SortField.dimension)),
+                    ),
+                  ],
                 ],
               ),
             ),
@@ -119,5 +139,41 @@ class ImageListPanel extends StatelessWidget {
     if (paths.isNotEmpty && context.mounted) {
       context.read<ImageListBloc>().add(ImagesAdded(paths));
     }
+  }
+}
+
+class _SortButton extends StatelessWidget {
+  final String label;
+  final bool active;
+  final bool ascending;
+  final VoidCallback onPressed;
+
+  const _SortButton({
+    required this.label,
+    required this.active,
+    required this.ascending,
+    required this.onPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton.icon(
+      onPressed: onPressed,
+      style: TextButton.styleFrom(
+        foregroundColor: active
+            ? Theme.of(context).colorScheme.primary
+            : Theme.of(context).colorScheme.onSurfaceVariant,
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        minimumSize: Size.zero,
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+      ),
+      icon: Icon(
+        active
+            ? (ascending ? Icons.arrow_upward : Icons.arrow_downward)
+            : Icons.sort,
+        size: 14,
+      ),
+      label: Text(label, style: const TextStyle(fontSize: 12)),
+    );
   }
 }

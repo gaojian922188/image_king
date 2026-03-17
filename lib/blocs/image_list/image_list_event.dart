@@ -45,3 +45,14 @@ class ImagesSelectAll extends ImageListEvent {
 class ImagesDeselectAll extends ImageListEvent {
   const ImagesDeselectAll();
 }
+
+enum SortField { size, dimension }
+
+class ImagesSorted extends ImageListEvent {
+  final SortField field;
+
+  const ImagesSorted(this.field);
+
+  @override
+  List<Object?> get props => [field];
+}
