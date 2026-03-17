@@ -1,0 +1,31 @@
+name: image_king
+description: "Image King - 桌面端图片处理工具"
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.8.1
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+  flutter_bloc: ^9.1.0
+  get_it: ^8.0.3
+  file_picker: ^8.1.6
+  image: ^4.5.3
+  path: ^1.9.1
+  path_provider: ^2.1.5
+  equatable: ^2.0.7
+  window_manager: ^0.4.3
+  desktop_drop: ^0.5.0
+  cross_file: ^0.3.5+2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
