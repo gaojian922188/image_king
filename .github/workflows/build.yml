@@ -30,7 +30,17 @@ jobs:
           channel: stable
       - run: flutter pub get
       - run: flutter build macos --release
+
+      # Fix executable permission and create DMG for easy installation
+      - name: Create DMG
+        run: |
+          chmod +x build/macos/Build/Products/Release/image_king.app/Contents/MacOS/image_king
+          hdiutil create -volname "Image King" \
+            -srcfolder build/macos/Build/Products/Release/image_king.app \
+            -ov -format UDZO \
+            image_king.dmg
+
       - uses: actions/upload-artifact@v4
         with:
           name: image-king-macos
-          path: build/macos/Build/Products/Release/image_king.app
+          path: image_king.dmg
